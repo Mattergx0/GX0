@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netwerk Veiligheidscontrole</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Netwerk Veiligheidscontrole</h1>
+        <form id="network-form">
+            <label for="ssid">Netwerknaam (SSID):</label>
+            <input type="text" id="ssid" name="ssid" required>
+
+            <label for="encryption">Encryptie Type:</label>
+            <select id="encryption" name="encryption">
+                <option value="WEP">WEP</option>
+                <option value="WPA2">WPA2</option>
+                <option value="WPA3">WPA3</option>
+                <option value="Open">Open</option>
+            </select>
+
+            <button type="submit">Controleer Veiligheid</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
