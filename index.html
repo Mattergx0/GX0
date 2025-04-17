@@ -3,28 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netwerk Veiligheidscontrole</title>
+    <meta name="theme-color" content="#0d47a1">
+    <title>GX0 Cybersecurity</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="icon.png">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Netwerk Veiligheidscontrole</h1>
-        <form id="network-form">
-            <label for="ssid">Netwerknaam (SSID):</label>
-            <input type="text" id="ssid" name="ssid" required>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>GX0 Cybersecurity</h1>
+            <p>Real-time beveiliging van je apparaat en netwerk.</p>
+        </header>
 
-            <label for="encryption">Encryptie Type:</label>
-            <select id="encryption" name="encryption">
-                <option value="WEP">WEP</option>
-                <option value="WPA2">WPA2</option>
-                <option value="WPA3">WPA3</option>
-                <option value="Open">Open</option>
-            </select>
+        <!-- Main Dashboard Section -->
+        <section class="dashboard">
+            <div class="card" id="security-monitor">
+                <h2>Beveiligingsmonitor</h2>
+                <p>Status: <span class="status safe">Beveiligd</span></p>
+                <button id="checkSecurity" class="scan-btn">Controleer Beveiliging</button>
+                <div id="securityResult" class="scan-result"></div>
+            </div>
+            <div class="card" id="privacy-settings">
+                <h2>Privacy-instellingen</h2>
+                <p>Beheer je privacy-instellingen hier.</p>
+                <button id="privacyBtn" class="scan-btn">Controleer Privacy</button>
+            </div>
+        </section>
 
-            <button type="submit">Controleer Veiligheid</button>
-        </form>
-        
-        <div id="result"></div>
+        <!-- Alerts Section -->
+        <section class="alerts">
+            <h2>Beveiligingsalerts</h2>
+            <div id="alertsList"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 GX0 Cybersecurity. Alle rechten voorbehouden.</p>
+        </footer>
     </div>
 
     <script src="app.js"></script>
