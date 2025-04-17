@@ -1,49 +1,142 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0d47a1">
-    <title>GX0 Cybersecurity</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="icon.png">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.png" type="image/png" />
+  <title>GX0 Cybersecurity</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f172a;
+      color: #f1f5f9;
+      transition: background 0.3s, color 0.3s;
+    }
+    header {
+      text-align: center;
+      padding: 2rem;
+      background-color: #1e293b;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    .card {
+      background: #1e293b;
+      margin: 1rem;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease-in-out;
+    }
+    .card:hover {
+      transform: scale(1.01);
+    }
+    .toggle-btn {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #38bdf8;
+      border: none;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      color: #0f172a;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .dark-mode {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .dark-mode .card {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+  </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Header -->
-        <header class="header">
-            <h1>GX0 Cybersecurity</h1>
-            <p>Real-time beveiliging van je apparaat en netwerk.</p>
-        </header>
+  <button class="toggle-btn" onclick="toggleDarkMode()">🌓</button>
+  <header>
+    <img src="icon.png" alt="GX0 Icon" style="width: 60px; height: 60px; border-radius: 50%;" />
+    <h1>GX0 Cybersecurity</h1>
+    <p>Jouw persoonlijke digitale beveiligingsdashboard</p>
+  </header>
 
-        <!-- Main Dashboard Section -->
-        <section class="dashboard">
-            <div class="card" id="security-monitor">
-                <h2>Beveiligingsmonitor</h2>
-                <p>Status: <span class="status safe">Beveiligd</span></p>
-                <button id="checkSecurity" class="scan-btn">Controleer Beveiliging</button>
-                <div id="securityResult" class="scan-result"></div>
-            </div>
-            <div class="card" id="privacy-settings">
-                <h2>Privacy-instellingen</h2>
-                <p>Beheer je privacy-instellingen hier.</p>
-                <button id="privacyBtn" class="scan-btn">Controleer Privacy</button>
-            </div>
-        </section>
+  <div class="card" id="network-status"></div>
+  <div class="card" id="ip-location"></div>
+  <div class="card" id="connection-check"></div>
+  <div class="card" id="privacy-permissions"></div>
+  <div class="card" id="scan-simulation"></div>
+  <div class="card">
+    <h2>🧠 Cybersecurity Educatie</h2>
+    <ul>
+      <li><strong>Phishing:</strong> Valse e-mails of websites die je gegevens proberen te stelen.</li>
+      <li><strong>Malware:</strong> Schadelijke software die je apparaat kan beschadigen.</li>
+      <li><strong>Tracking:</strong> Websites die je gedrag volgen zonder toestemming.</li>
+    </ul>
+  </div>
 
-        <!-- Alerts Section -->
-        <section class="alerts">
-            <h2>Beveiligingsalerts</h2>
-            <div id="alertsList"></div>
-        </section>
+  <script>
+    async function updateInfo() {
+      // 🌐 IP & locatie info ophalen via API
+      const locRes = await fetch('https://ipapi.co/json/');
+      const locData = await locRes.json();
 
-        <!-- Footer -->
-        <footer>
-            <p>&copy; 2025 GX0 Cybersecurity. Alle rechten voorbehouden.</p>
-        </footer>
-    </div>
+      document.getElementById('ip-location').innerHTML = `
+        <h2>🌍 IP & Locatie</h2>
+        <p><strong>IP:</strong> ${locData.ip}</p>
+        <p><strong>Land:</strong> ${locData.country_name}</p>
+        <p><strong>Regio:</strong> ${locData.region}</p>
+        <p><strong>Stad:</strong> ${locData.city}</p>
+        <p><strong>Provider:</strong> ${locData.org}</p>
+      `;
 
-    <script src="app.js"></script>
+      // 📡 Netwerkstatus en protocol
+      document.getElementById('network-status').innerHTML = `
+        <h2>📡 Netwerkstatus</h2>
+        <p><strong>Status:</strong> ${navigator.onLine ? 'Online' : 'Offline'}</p>
+        <p><strong>Protocol:</strong> ${location.protocol.replace(':', '')}</p>
+      `;
+
+      // 🔒 Verbinding beveiliging check
+      document.getElementById('connection-check').innerHTML = `
+        <h2>🔒 Verbinding Check</h2>
+        <p>${location.protocol === 'https:' ? '✅ Beveiligde HTTPS-verbinding' : '⚠️ Onveilige verbinding (HTTP)'}</p>
+      `;
+
+      // 📸 Privacy-permissies check
+      let permList = ['geolocation', 'notifications', 'camera', 'microphone'];
+      let results = await Promise.all(
+        permList.map(async perm => {
+          try {
+            let status = await navigator.permissions.query({ name: perm });
+            return `<li>${perm}: ${status.state}</li>`;
+          } catch (e) {
+            return `<li>${perm}: Niet beschikbaar</li>`;
+          }
+        })
+      );
+      document.getElementById('privacy-permissions').innerHTML = `
+        <h2>📸 Privacy Check</h2>
+        <ul>${results.join('')}</ul>
+      `;
+
+      // ⚠️ Simulatie Scan
+      document.getElementById('scan-simulation').innerHTML = `
+        <h2>⚠️ Simulatie Scan</h2>
+        <p>Geen verdachte activiteit gedetecteerd.</p>
+        <p>Status: ✅ Alles lijkt veilig</p>
+      `;
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    updateInfo();
+  </script>
 </body>
 </html>
