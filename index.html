@@ -2,67 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>GX0 Cybersecurity</title>
   <link rel="manifest" href="manifest.json" />
   <link rel="icon" href="icon.png" type="image/png" />
-  <title>GX0 Cybersecurity</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="theme-color" content="#0f172a" />
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
       background-color: #0f172a;
-      color: #f1f5f9;
-      transition: background 0.3s, color 0.3s;
+      color: #f8fafc;
+      padding-bottom: 100px;
     }
     header {
+      padding: 1.5rem;
       text-align: center;
-      padding: 2rem;
-      background-color: #1e293b;
+      background: #1e293b;
     }
     h1 {
-      margin: 0;
-      font-size: 2rem;
+      margin: 0.5rem 0 0;
+      font-size: 1.8rem;
     }
     .card {
       background: #1e293b;
       margin: 1rem;
-      padding: 1.5rem;
+      padding: 1rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-      transition: transform 0.2s ease-in-out;
-    }
-    .card:hover {
-      transform: scale(1.01);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
     .toggle-btn {
       position: fixed;
-      top: 1rem;
+      bottom: 1rem;
       right: 1rem;
       background: #38bdf8;
-      border: none;
-      border-radius: 999px;
-      padding: 0.5rem 1rem;
       color: #0f172a;
       font-weight: bold;
+      border: none;
+      border-radius: 999px;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
       cursor: pointer;
+      z-index: 999;
     }
     .dark-mode {
-      background: #f8fafc;
+      background: #f1f5f9;
       color: #0f172a;
     }
     .dark-mode .card {
       background: #e2e8f0;
       color: #0f172a;
     }
+    img.icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 12px;
+      margin-bottom: 0.5rem;
+    }
   </style>
 </head>
 <body>
   <button class="toggle-btn" onclick="toggleDarkMode()">🌓</button>
   <header>
-    <img src="icon.png" alt="GX0 Icon" style="width: 60px; height: 60px; border-radius: 50%;" />
+    <img src="icon.png" alt="App Icon" class="icon" />
     <h1>GX0 Cybersecurity</h1>
-    <p>Jouw persoonlijke digitale beveiligingsdashboard</p>
+    <p>Beveiliging & privacy op zakformaat 🔐</p>
   </header>
 
   <div class="card" id="network-status"></div>
@@ -73,62 +79,64 @@
   <div class="card">
     <h2>🧠 Cybersecurity Educatie</h2>
     <ul>
-      <li><strong>Phishing:</strong> Valse e-mails of websites die je gegevens proberen te stelen.</li>
-      <li><strong>Malware:</strong> Schadelijke software die je apparaat kan beschadigen.</li>
-      <li><strong>Tracking:</strong> Websites die je gedrag volgen zonder toestemming.</li>
+      <li><strong>Phishing:</strong> Nepmails/sites om je gegevens te stelen.</li>
+      <li><strong>Malware:</strong> Schadelijke software op je apparaat.</li>
+      <li><strong>Tracking:</strong> Onzichtbare volgcodes op websites.</li>
     </ul>
   </div>
 
   <script>
     async function updateInfo() {
       // IP & locatie via API
-      const locRes = await fetch('https://ipapi.co/json/');
-      const locData = await locRes.json();
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
 
-      document.getElementById('ip-location').innerHTML = `
-        <h2>🌍 IP & Locatie</h2>
-        <p><strong>IP:</strong> ${locData.ip}</p>
-        <p><strong>Land:</strong> ${locData.country_name}</p>
-        <p><strong>Regio:</strong> ${locData.region}</p>
-        <p><strong>Stad:</strong> ${locData.city}</p>
-        <p><strong>Provider:</strong> ${locData.org}</p>
-      `;
+        document.getElementById('ip-location').innerHTML = `
+          <h2>🌍 IP & Locatie</h2>
+          <p><strong>IP:</strong> ${data.ip}</p>
+          <p><strong>Land:</strong> ${data.country_name}</p>
+          <p><strong>Regio:</strong> ${data.region}</p>
+          <p><strong>Stad:</strong> ${data.city}</p>
+          <p><strong>Provider:</strong> ${data.org}</p>
+        `;
+      } catch (e) {
+        document.getElementById('ip-location').innerHTML = `<p>⚠️ Kan IP-info niet laden.</p>`;
+      }
 
       // Netwerkstatus
       document.getElementById('network-status').innerHTML = `
         <h2>📡 Netwerkstatus</h2>
         <p><strong>Status:</strong> ${navigator.onLine ? 'Online' : 'Offline'}</p>
-        <p><strong>Protocol:</strong> ${location.protocol.replace(':', '')}</p>
+        <p><strong>Protocol:</strong> ${location.protocol.replace(':','')}</p>
       `;
 
-      // Verbinding check
+      // Verbinding
       document.getElementById('connection-check').innerHTML = `
-        <h2>🔒 Verbinding Check</h2>
-        <p>${location.protocol === 'https:' ? '✅ Beveiligde HTTPS-verbinding' : '⚠️ Onveilige verbinding (HTTP)'}</p>
+        <h2>🔒 Verbinding</h2>
+        <p>${location.protocol === 'https:' ? '✅ HTTPS-beveiliging actief' : '⚠️ Onveilige HTTP-verbinding'}</p>
       `;
 
       // Privacy-permissies
-      let permList = ['geolocation', 'notifications', 'camera', 'microphone'];
-      let results = await Promise.all(
-        permList.map(async perm => {
-          try {
-            let status = await navigator.permissions.query({ name: perm });
-            return `<li>${perm}: ${status.state}</li>`;
-          } catch (e) {
-            return `<li>${perm}: Niet beschikbaar</li>`;
-          }
-        })
-      );
+      let permissions = ['geolocation', 'notifications', 'camera', 'microphone'];
+      let results = await Promise.all(permissions.map(async perm => {
+        try {
+          let status = await navigator.permissions.query({ name: perm });
+          return `<li>${perm}: ${status.state}</li>`;
+        } catch {
+          return `<li>${perm}: Niet beschikbaar</li>`;
+        }
+      }));
       document.getElementById('privacy-permissions').innerHTML = `
-        <h2>📸 Privacy Check</h2>
+        <h2>📸 Browserrechten</h2>
         <ul>${results.join('')}</ul>
       `;
 
-      // Simulatie scan
+      // Simulatie
       document.getElementById('scan-simulation').innerHTML = `
         <h2>⚠️ Simulatie Scan</h2>
-        <p>Geen verdachte activiteit gedetecteerd.</p>
-        <p>Status: ✅ Alles lijkt veilig</p>
+        <p>Scan voltooid: Geen bedreigingen gevonden ✅</p>
+        <p>Systeemveiligheid: OK</p>
       `;
     }
 
