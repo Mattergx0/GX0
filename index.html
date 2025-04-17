@@ -81,7 +81,7 @@
 
   <script>
     async function updateInfo() {
-      // 🌐 IP & locatie info ophalen via API
+      // IP & locatie via API
       const locRes = await fetch('https://ipapi.co/json/');
       const locData = await locRes.json();
 
@@ -94,20 +94,20 @@
         <p><strong>Provider:</strong> ${locData.org}</p>
       `;
 
-      // 📡 Netwerkstatus en protocol
+      // Netwerkstatus
       document.getElementById('network-status').innerHTML = `
         <h2>📡 Netwerkstatus</h2>
         <p><strong>Status:</strong> ${navigator.onLine ? 'Online' : 'Offline'}</p>
         <p><strong>Protocol:</strong> ${location.protocol.replace(':', '')}</p>
       `;
 
-      // 🔒 Verbinding beveiliging check
+      // Verbinding check
       document.getElementById('connection-check').innerHTML = `
         <h2>🔒 Verbinding Check</h2>
         <p>${location.protocol === 'https:' ? '✅ Beveiligde HTTPS-verbinding' : '⚠️ Onveilige verbinding (HTTP)'}</p>
       `;
 
-      // 📸 Privacy-permissies check
+      // Privacy-permissies
       let permList = ['geolocation', 'notifications', 'camera', 'microphone'];
       let results = await Promise.all(
         permList.map(async perm => {
@@ -124,7 +124,7 @@
         <ul>${results.join('')}</ul>
       `;
 
-      // ⚠️ Simulatie Scan
+      // Simulatie scan
       document.getElementById('scan-simulation').innerHTML = `
         <h2>⚠️ Simulatie Scan</h2>
         <p>Geen verdachte activiteit gedetecteerd.</p>
